@@ -1,3 +1,6 @@
+![Dashboard](Dashboard.png)
+
+
 # User Behavior Analysis & Purchase Prediction Dashboard
 
 ## Project Overview
