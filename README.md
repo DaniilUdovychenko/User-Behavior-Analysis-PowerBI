@@ -52,17 +52,20 @@ You can find the core logic of the dashboard in these formulas:
 ### A. Conversion Rate
 This measure calculates the percentage of users who completed a purchase.
 
-<> DAX Conversion Rate = DIVIDE( CALCULATE(COUNT('Users'[purchase]), 'Users'[purchase] = "1"), COUNT('Users'[purchase]), 0 )
+<> DAX Conversion Rate = DIVIDE( COUNTROWS(FILTER(ecommerce_user_behavior_8000, ecommerce_user_behavior_8000[purchase] = "1")), COUNTROWS(ecommerce_user_behavior_8000)) * 100
 
 ### B. User Engagement Index
 A composite score to measure how deep a user's session was. It normalizes time_on_site and pages_viewed on a scale from 0 to 1.
 
-<> DAX User_Engagement_Index = VAR MaxTime = 30 // Threshold for session duration VAR MaxPages = 20 // Threshold for pages viewed RETURN ( DIVIDE('Users'[time_on_site], MaxTime) + DIVIDE('Users'[pages_viewed], MaxPages) ) / 2
+<> DAX User_Engagement_Index = 
+VAR NormalizedTime = ecommerce_user_behavior_8000[time_on_site] / 30 
+VAR NormalizedPages = ecommerce_user_behavior_8000[pages_viewed] / 20
+RETURN (NormalizedTime + NormalizedPages) / 2
 
 ### C. Session Efficiency (Avg Pages per Minute)
 Measures how quickly a user finds what they need.
 
-<> DAX Avg Pages per Minute = DIVIDE( SUM('Users'[pages_viewed]), SUM('Users'[time_on_site]), 0 )
+<> DAX Avg Pages per Minute = DIVIDE(SUM(ecommerce_user_behavior_8000[pages_viewed]), SUM(ecommerce_user_behavior_8000[time_on_site]))
 
 ## 3. Business Logic Behind the Visuals
 
